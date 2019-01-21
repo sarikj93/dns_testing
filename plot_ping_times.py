@@ -4,17 +4,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from glob import glob
 
-ping_files = sorted(glob('pingtest*.txt'))
+ping_files = sorted(glob('pingtest*.txt'))  # Get file names
 
 plt.figure()
 
 for file in ping_files:
-    label = file.strip('pingtest').strip('.txt')
-    info = np.genfromtxt(file, skip_header=1, usecols=(6,), dtype=str)
+    label = file.strip('pingtest').strip('.txt')  # Get labels for the data sets
+    info = np.genfromtxt(file, skip_header=1, usecols=(6,), dtype=str)  # Extract the ping times from the text files
     times = []
     for i in range(len(info)):
         times.append(float(info[i].split('=')[-1]))
-    plt.plot(range(1, len(times)+1), times, label=label)
+    plt.bar(range(1, len(times)+1), times, label=label)
+    print('Mean ping time for %s: %d +/- %d ms' % (label, np.mean(times), np.std(times)/np.sqrt(len(times))))
 
 plt.title('DNS Server Ping Times')
 plt.xlabel('Data Point')
