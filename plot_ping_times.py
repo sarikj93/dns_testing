@@ -11,11 +11,12 @@ plt.figure()
 for file in ping_files:
     label = file.strip('pingtest').strip('.txt')  # Get labels for the data sets
     info = np.genfromtxt(file, skip_header=1, usecols=(6,), dtype=str)  # Extract the ping times from the text files
-    times = []
+    times = np.array([], float)
     for i in range(len(info)):
-        times.append(float(info[i].split('=')[-1]))
+        times = np.append(times, float(info[i].split('=')[-1]))
+    times = times[times < 100]
     plt.bar(range(1, len(times)+1), times, label=label)
-    print('Mean ping time for %s: %d +/- %d ms' % (label, np.mean(times), np.std(times)/np.sqrt(len(times))))
+    print('Mean ping time for %s: %d +/- %d ms' % (label, np.mean(times), np.std(times)))
 
 plt.title('DNS Server Ping Times')
 plt.xlabel('Data Point')
